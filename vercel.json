@@ -1,47 +1,6 @@
 {
-  "routes": [
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "host", "value": "mapakarmico.astralia.online" }],
-      "dest": "/mapakarmico.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "host", "value": "lilith.astralia.online" }],
-      "dest": "/lilith.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "host", "value": "mapadasorte.astralia.online" }],
-      "dest": "/mapadasorte.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "host", "value": "sinastria.astralia.online" }],
-      "dest": "/sinastria.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "host", "value": "mapaprofissional.astralia.online" }],
-      "dest": "/mapaprofissional.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "host", "value": "mapaprevisoes.astralia.online" }],
-      "dest": "/mapaprevisoes.html"
-    },
-    {
-      "src": "/(.*)",
-      "has": [{ "type": "host", "value": "app.astralia.online" }],
-      "dest": "/app.html"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "version": 2,
+  "rewrites": [
+    { "source": "/", "destination": "/public/index.html" }
   ]
 }
