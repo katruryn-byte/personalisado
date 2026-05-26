@@ -24,7 +24,6 @@ module.exports = async function handler(req, res) {
       codigoCliente: session.codigoCliente || null,
       novoCliente: session.novoCliente || false
     });
-
   } catch (error) {
     console.error('Check erro:', error.message);
     return res.status(500).json({ error: error.message });
