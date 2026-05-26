@@ -14,7 +14,8 @@ const PREFIXOS = {
   sinastria: 'SIN',
   mapaprofissional: 'PRO',
   mapaprevisoes: 'PRE',
-  revolucaosolar: 'REV'
+  revolucaosolar: 'REV',
+  mapaastralpersonalizado: 'MAP'
 };
 
 // Gera codigo unico tipo ASTRO-LIL-X7F2Q9
