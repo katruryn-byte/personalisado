@@ -1,1 +1,9 @@
+{
+  "mapaastralpersonalizado": {
+    "ativo": true,
+    "preco": 1.00,
+    "precoCheio": 197.00,
+    "_nota": "preco=1.00 em teste. Em producao usar o repo central katruryn-byte/astralia-precos. precoCheio e referencia de exibicao."
+  }
+}
 
