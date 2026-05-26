@@ -1,9 +1,10 @@
 {
-  "name": "astralia",
+  "name": "mapa-astral-personalizado",
   "version": "1.0.0",
-  "description": "Astral IA - Leituras Astrologicas com Inteligencia Artificial",
+  "description": "Mapa Astral Personalizado (premium) - Astralia.online",
+  "private": true,
   "dependencies": {
-    "mercadopago": "^2.0.6",
+    "mercadopago": "^2.0.15",
     "redis": "^4.6.13"
   }
 }
