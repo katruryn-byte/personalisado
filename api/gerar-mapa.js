@@ -13,7 +13,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const { buildPromptMapaAstralPersonalizado } = require('./prompt-mapa-astral-personalizado');
-const { getTimezone } = require('./timezone-config');
+const { resolverTimezone } = require('./timezone-coord');
 
 const FA_BASE = 'https://json.freeastrologyapi.com/western';
 const MODELO = 'claude-opus-4-7';
@@ -141,7 +141,7 @@ async function gerarMapa(dados, opts = {}) {
     year: dt.getFullYear(), month: dt.getMonth() + 1, date: dt.getDate(),
     hours: dt.getHours(), minutes: dt.getMinutes(), seconds: 0,
     latitude: parseFloat(dados.lat), longitude: parseFloat(dados.lon),
-    timezone: typeof dados.timezone === 'number' ? dados.timezone : getTimezone(dados.data, dados.hora, dados.cidade)
+    timezone: resolverTimezone(dados)
   };
 
   // 1) Dados astrológicos reais
@@ -199,4 +199,3 @@ async function gerarMapa(dados, opts = {}) {
 }
 
 module.exports = { gerarMapa, parseFreeAstrology, calcularCasa, extrairJSON, PLANETA, SIGNO, ASPECTO };
-
