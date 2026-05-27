@@ -1,1 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mapa Astral Personalizado — Astral IA</title>
+<meta name="description" content="Cada planeta, casa e aspecto do seu mapa traduzido em profundidade — quem você é, como ama, do que precisa e para onde caminha."/>
+<meta property="og:title" content="Mapa Astral Personalizado — Astral IA"/>
+<meta property="og:description" content="O Retrato Completo de Quem Você É"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#c9a84c;--accent:#f0c840;--dark:#06030e;--card:#0d0620;--border:#1c0e40;--text:#e5d0ff;--muted:#7a5ea0}
+body,html{background:var(--dark);color:var(--text);font-family:'Cormorant Garamond',serif;scroll-behavior:smooth;overflow-x:hidden}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 0%,#1a1200 0%,#06030e 70%)}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.orb1{width:400px;height:400px;background:rgba(201,168,76,0.1);top:-100px;left:-100px}
+.orb2{width:300px;height:300px;background:rgba(240,200,64,0.06);bottom:-50px;right:-50px}
+.hero-badge{display:inline-block;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.35);color:var(--accent);font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.25em;padding:.35rem 1rem;border-radius:20px;margin-bottom:1.5rem;animation:fadeUp .8s ease both}
+.hero-icon{font-size:4rem;margin-bottom:1rem;animation:fadeUp .8s .1s ease both;filter:drop-shadow(0 0 20px rgba(201,168,76,0.5))}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(2rem,6vw,3.5rem);color:#f0d080;letter-spacing:.15em;line-height:1.1;margin-bottom:.6rem;animation:fadeUp .8s .2s ease both}
+.hero-sub{font-family:'Cinzel',serif;font-size:clamp(.85rem,2vw,1.1rem);color:var(--accent);letter-spacing:.12em;margin-bottom:1rem;animation:fadeUp .8s .3s ease both}
+.hero-desc{font-size:1.05rem;color:var(--muted);font-style:italic;max-width:580px;line-height:1.85;margin:0 auto 2rem;animation:fadeUp .8s .4s ease both}
+.hero-price{animation:fadeUp .8s .5s ease both;margin-bottom:2rem}
+.price-de{font-size:.9rem;color:#5a3d80;text-decoration:line-through;margin-bottom:.2rem}
+.price-por{font-family:'Cinzel',serif;font-size:2.5rem;color:var(--gold);line-height:1}
+.price-label{font-size:.75rem;color:#7a5ea0;margin-top:.3rem}
+.btn-comprar{display:inline-block;background:linear-gradient(135deg,#7a5000,#c9a84c);border:none;color:#fff;font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.15em;padding:1rem 2.5rem;border-radius:30px;cursor:pointer;transition:all .3s;text-decoration:none;animation:fadeUp .8s .6s ease both;box-shadow:0 8px 32px rgba(201,168,76,0.3)}
+.btn-comprar:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(201,168,76,0.5)}
+.hero-seguro{font-size:.72rem;color:#3a2560;margin-top:1rem;animation:fadeUp .8s .7s ease both}
+.section{padding:4rem 1.5rem}.section.alt{background:rgba(13,6,32,0.5)}
+.sec-label{font-family:'Cinzel',serif;font-size:.6rem;color:var(--gold);letter-spacing:.25em;text-align:center;margin-bottom:.5rem}
+.sec-title{font-family:'Cinzel',serif;font-size:clamp(1.3rem,3vw,2rem);text-align:center;color:#f0d080;margin-bottom:.6rem;line-height:1.3}
+.sec-sub{font-size:.95rem;color:var(--muted);text-align:center;font-style:italic;line-height:1.8;max-width:560px;margin:0 auto 2.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;max-width:900px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,0.3)}
+.card-icon{font-size:1.8rem;margin-bottom:.7rem}
+.card-title{font-family:'Cinzel',serif;font-size:.78rem;color:#f0d080;letter-spacing:.08em;margin-bottom:.5rem}
+.card-text{font-size:.88rem;color:#6a4d90;line-height:1.75;font-weight:300}
+.inclui-list{max-width:600px;margin:0 auto;display:grid;gap:.6rem}
+.inclui-item{display:flex;align-items:center;gap:.8rem;font-size:.9rem;color:#9070c0;line-height:1.6}
+.inclui-check{color:var(--gold);font-size:1rem;flex-shrink:0}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;max-width:900px;margin:0 auto}
+.testi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.testi-stars{color:var(--gold);margin-bottom:.6rem}
+.testi-text{font-size:.9rem;color:#7a5ea0;line-height:1.8;font-style:italic;margin-bottom:.8rem}
+.testi-name{font-family:'Cinzel',serif;font-size:.6rem;color:#5a3d80;letter-spacing:.1em}
+.cta{max-width:600px;margin:0 auto;background:linear-gradient(135deg,rgba(120,100,0,.1),rgba(201,168,76,.08));border:1px solid rgba(201,168,76,.25);border-radius:22px;padding:3rem 2rem;text-align:center}
+.cta h2{font-family:'Cinzel',serif;font-size:clamp(1.2rem,3vw,1.8rem);color:#f0d080;margin-bottom:.8rem;line-height:1.3}
+.cta p{font-size:.95rem;color:var(--muted);font-style:italic;line-height:1.8;margin-bottom:1.5rem}
+footer{border-top:1px solid var(--border);padding:2rem 1.5rem;text-align:center}
+.footer-logo{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold);margin-bottom:.4rem}
+.footer-text{font-size:.75rem;color:#4a3060;line-height:1.7}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* ===== CHECKOUT — mesma identidade (dourado/roxo, Cinzel/Cormorant) ===== */
+.checkout-wrap{max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:2.2rem 1.8rem}
+.fbox{margin-bottom:1.4rem}
+.fbox-title{font-family:'Cinzel',serif;font-size:.65rem;color:var(--gold);letter-spacing:.18em;text-align:center;margin-bottom:1rem}
+.fd{margin-bottom:.9rem;position:relative}
+.fd label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.3rem;letter-spacing:.03em}
+.fd input,.fd select{width:100%;background:#100828;border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:1rem;padding:.7rem .9rem;outline:none;transition:border-color .2s}
+.fd input:focus,.fd select:focus{border-color:var(--gold)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem}
+.autocomplete-results{position:absolute;top:100%;left:0;right:0;background:#15102b;border:1px solid var(--border);border-radius:0 0 10px 10px;z-index:30;max-height:220px;overflow-y:auto;display:none}
+.autocomplete-item{padding:.6rem .9rem;cursor:pointer;font-size:.9rem;border-bottom:1px solid var(--border)}
+.autocomplete-item:hover{background:#241a4d;color:var(--accent)}
+.preco-box{text-align:center;padding:1rem;border:1px dashed rgba(201,168,76,.4);border-radius:12px;margin-bottom:1.4rem}
+.preco-label{font-size:.85rem;color:var(--muted)}
+.preco-val{font-family:'Cinzel',serif;font-size:1.8rem;color:var(--gold)}
+.metodos{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1rem}
+.metodo-btn{background:#100828;border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;cursor:pointer;transition:all .2s}
+.metodo-btn.ativo{border-color:var(--gold);background:rgba(201,168,76,.08)}
+.metodo-btn-icon{font-size:1.5rem}
+.metodo-btn-label{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.1em;color:var(--text);margin-top:.3rem}
+.form-cartao{display:none}.form-cartao.ativo{display:block}
+.lgpd-checkbox{display:flex;gap:.7rem;align-items:flex-start;background:#100828;border:1px solid var(--border);border-radius:10px;padding:.8rem;margin-bottom:1rem;cursor:pointer}
+.lgpd-checkbox input{margin-top:.2rem;flex-shrink:0}
+.lgpd-checkbox-text{font-size:.78rem;color:var(--muted);line-height:1.5}
+.btn-pagar{width:100%;background:linear-gradient(135deg,#7a5000,#c9a84c);border:none;color:#fff;font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.12em;padding:1.1rem;border-radius:30px;cursor:pointer;transition:all .3s;box-shadow:0 8px 32px rgba(201,168,76,.3)}
+.btn-pagar:hover{transform:translateY(-2px)}.btn-pagar:disabled{opacity:.6;cursor:wait;transform:none}
+.err-msg{display:none;background:rgba(180,40,60,.15);border:1px solid rgba(180,40,60,.4);color:#f0a0b0;font-size:.85rem;border-radius:10px;padding:.7rem;margin-bottom:1rem;text-align:center}
+.pix-box{text-align:center}
+.pix-qr{width:220px;height:220px;border-radius:12px;background:#fff;padding:8px;margin:.6rem auto}
+.pix-code{background:#100828;border:1px solid var(--border);border-radius:10px;padding:.7rem;font-size:.75rem;color:var(--muted);word-break:break-all;margin:.6rem 0}
+.btn-copy{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.1em;padding:.6rem 1.4rem;border-radius:24px;cursor:pointer}
+.aguardando-box,.sucesso-box{display:none;text-align:center;padding:1rem}
+.sucesso-icon{font-size:3rem;filter:drop-shadow(0 0 20px rgba(201,168,76,.5))}
+.sucesso-box h3{font-family:'Cinzel',serif;color:#f0d080;letter-spacing:.08em;margin:.8rem 0}
+.sucesso-box p{color:var(--muted);font-size:.95rem;line-height:1.8;font-style:italic}
+/* estrelas animadas (astros) */
+.stars{position:absolute;inset:0;pointer-events:none;z-index:0}
+.star{position:absolute;background:var(--accent);border-radius:50%;opacity:0;animation:twinkle linear infinite}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.6)}50%{opacity:.9;transform:scale(1)}}
+.hero>*:not(.stars):not(.orb){position:relative;z-index:1}
+.hero-icon{animation:fadeUp .8s .1s ease both, pulse 3.5s ease-in-out infinite 1s}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 20px rgba(201,168,76,.5))}50%{filter:drop-shadow(0 0 38px rgba(240,200,64,.8))}}
+/* countdown */
+.countdown{display:inline-flex;gap:.5rem;align-items:center;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);border-radius:14px;padding:.6rem 1.1rem;margin-bottom:1.6rem;animation:fadeUp .8s .55s ease both}
+.cd-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.12em;color:var(--muted)}
+.cd-time{font-family:'Cinzel',serif;font-size:.95rem;color:var(--accent);letter-spacing:.05em}
+/* código de cliente recorrente */
+.cr-box{background:rgba(201,168,76,.06);border:1px dashed rgba(201,168,76,.35);border-radius:12px;padding:1rem;margin-bottom:1.4rem}
+.cr-title{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.14em;color:var(--gold);margin-bottom:.6rem;text-align:center}
+.cr-row{display:flex;gap:.5rem}
+.cr-row input{flex:1;background:#100828;border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.08em;padding:.6rem .8rem;text-transform:uppercase;outline:none}
+.cr-row button{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.1em;padding:0 1.1rem;border-radius:10px;cursor:pointer;white-space:nowrap}
+.cr-status{font-size:.78rem;margin-top:.5rem;text-align:center;min-height:1rem}
+.cr-status.ok{color:#7fd6a0}.cr-status.erro{color:#f0a0b0}
+/* upsell */
+.upsell-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;max-width:820px;margin:0 auto}
+.upsell-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;text-align:center;transition:transform .3s,border-color .3s;text-decoration:none;display:block}
+.upsell-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.4)}
+.upsell-icon{font-size:1.8rem}
+.upsell-nome{font-family:'Cinzel',serif;font-size:.74rem;color:#f0d080;letter-spacing:.06em;margin:.5rem 0}
+.upsell-preco{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold)}
+.upsell-de{font-size:.72rem;color:#5a3d80;text-decoration:line-through}
+@media(max-width:580px){.grid{grid-template-columns:1fr}.testi-grid{grid-template-columns:1fr}.r3{grid-template-columns:1fr}.upsell-grid{grid-template-columns:1fr}}
 
+/* ANIMACAO (CSS puro) */
+.stars{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;background:var(--accent);border-radius:50%;box-shadow:0 0 4px var(--accent);animation:twinkle ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.4)}}
+.shoot{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:0 0 8px 2px var(--accent);opacity:0;z-index:0}
+.shoot::after{content:'';position:absolute;top:50%;right:3px;width:140px;height:1.5px;background:linear-gradient(90deg,transparent,var(--accent));transform:translateY(-50%)}
+.shoot1{animation:shoot 8s ease-in infinite 2s}
+.shoot2{animation:shoot 11s ease-in infinite 6s}
+@keyframes shoot{0%{transform:translate(-5vw,-2vh) rotate(20deg);opacity:0}8%{opacity:1}26%{transform:translate(75vw,32vh) rotate(20deg);opacity:0}100%{opacity:0}}
+.orbita{position:relative;width:170px;height:170px;margin:0 auto;display:flex;align-items:center;justify-content:center;z-index:1}
+.anel{position:absolute;border-radius:50%;border:1px solid var(--gold)}
+.anel1{width:118px;height:118px;opacity:.5;animation:spin 16s linear infinite}
+.anel2{width:170px;height:170px;opacity:.22;animation:spin 34s linear infinite reverse}
+.anel1::before{content:'';position:absolute;top:-5px;left:50%;width:9px;height:9px;margin-left:-4.5px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px 3px var(--accent)}
+.anel2::before{content:'';position:absolute;bottom:-4px;left:50%;width:7px;height:7px;margin-left:-3.5px;background:var(--gold);border-radius:50%;box-shadow:0 0 10px 2px var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orbita .hero-icon{margin:0;font-size:3.6rem;animation:pulse 3.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 18px var(--accent))}50%{filter:drop-shadow(0 0 40px var(--gold))}}</style>
+</head>
+<body>
+<div class="hero">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="stars"><span class="star" style="left:80.0%;top:67.7%;width:2.4px;height:2.4px;animation-duration:2.5s;animation-delay:0.2s"></span><span class="star" style="left:69.7%;top:0.9%;width:2.1px;height:2.1px;animation-duration:3.1s;animation-delay:2.7s"></span><span class="star" style="left:31.8%;top:4.1%;width:2.2px;height:2.2px;animation-duration:2.7s;animation-delay:3.6s"></span><span class="star" style="left:62.2%;top:19.7%;width:1.1px;height:1.1px;animation-duration:3.3s;animation-delay:1.2s"></span><span class="star" style="left:17.6%;top:79.1%;width:1.4px;height:1.4px;animation-duration:4.2s;animation-delay:3.2s"></span><span class="star" style="left:78.6%;top:79.7%;width:2.6px;height:2.6px;animation-duration:3.0s;animation-delay:1.8s"></span><span class="star" style="left:20.3%;top:60.2%;width:2.9px;height:2.9px;animation-duration:3.7s;animation-delay:0.7s"></span><span class="star" style="left:4.2%;top:38.4%;width:1.1px;height:1.1px;animation-duration:3.2s;animation-delay:1.3s"></span><span class="star" style="left:40.1%;top:72.2%;width:3.4px;height:3.4px;animation-duration:4.9s;animation-delay:0.5s"></span><span class="star" style="left:47.1%;top:99.2%;width:2.9px;height:2.9px;animation-duration:2.3s;animation-delay:1.5s"></span><span class="star" style="left:22.8%;top:36.0%;width:2.9px;height:2.9px;animation-duration:2.9s;animation-delay:1.3s"></span><span class="star" style="left:74.2%;top:88.5%;width:1.0px;height:1.0px;animation-duration:4.0s;animation-delay:3.3s"></span><span class="star" style="left:88.6%;top:94.7%;width:3.3px;height:3.3px;animation-duration:3.3s;animation-delay:2.5s"></span><span class="star" style="left:88.0%;top:69.0%;width:3.0px;height:3.0px;animation-duration:4.4s;animation-delay:3.1s"></span><span class="star" style="left:67.3%;top:54.9%;width:3.3px;height:3.3px;animation-duration:4.6s;animation-delay:1.2s"></span><span class="star" style="left:19.7%;top:56.6%;width:3.5px;height:3.5px;animation-duration:4.5s;animation-delay:2.5s"></span><span class="star" style="left:60.9%;top:16.4%;width:2.0px;height:2.0px;animation-duration:4.1s;animation-delay:0.0s"></span><span class="star" style="left:62.6%;top:34.1%;width:1.1px;height:1.1px;animation-duration:3.6s;animation-delay:3.2s"></span><span class="star" style="left:57.9%;top:26.0%;width:3.4px;height:3.4px;animation-duration:4.5s;animation-delay:0.2s"></span><span class="star" style="left:44.2%;top:73.2%;width:1.9px;height:1.9px;animation-duration:3.5s;animation-delay:0.6s"></span><span class="star" style="left:71.8%;top:8.8%;width:3.1px;height:3.1px;animation-duration:3.3s;animation-delay:2.8s"></span><span class="star" style="left:55.1%;top:18.5%;width:1.0px;height:1.0px;animation-duration:2.2s;animation-delay:3.9s"></span><span class="star" style="left:58.5%;top:21.7%;width:3.2px;height:3.2px;animation-duration:2.3s;animation-delay:0.7s"></span><span class="star" style="left:82.6%;top:82.3%;width:2.8px;height:2.8px;animation-duration:2.3s;animation-delay:0.7s"></span><span class="star" style="left:46.1%;top:26.4%;width:1.6px;height:1.6px;animation-duration:2.9s;animation-delay:1.6s"></span><span class="star" style="left:72.1%;top:76.8%;width:2.1px;height:2.1px;animation-duration:3.1s;animation-delay:1.6s"></span><span class="star" style="left:43.6%;top:82.0%;width:3.2px;height:3.2px;animation-duration:3.6s;animation-delay:3.1s"></span><span class="star" style="left:27.0%;top:61.5%;width:1.8px;height:1.8px;animation-duration:4.6s;animation-delay:3.7s"></span><span class="star" style="left:73.1%;top:51.4%;width:1.5px;height:1.5px;animation-duration:4.6s;animation-delay:2.5s"></span><span class="star" style="left:15.3%;top:74.1%;width:2.0px;height:2.0px;animation-duration:4.9s;animation-delay:0.5s"></span><span class="star" style="left:30.0%;top:62.6%;width:2.4px;height:2.4px;animation-duration:2.3s;animation-delay:0.3s"></span><span class="star" style="left:76.4%;top:0.2%;width:2.6px;height:2.6px;animation-duration:4.6s;animation-delay:3.1s"></span><span class="star" style="left:79.2%;top:31.3%;width:1.6px;height:1.6px;animation-duration:2.1s;animation-delay:1.9s"></span><span class="star" style="left:41.1%;top:99.1%;width:1.2px;height:1.2px;animation-duration:3.9s;animation-delay:2.2s"></span><span class="star" style="left:29.4%;top:51.9%;width:1.5px;height:1.5px;animation-duration:4.9s;animation-delay:1.8s"></span><span class="star" style="left:1.7%;top:8.3%;width:1.6px;height:1.6px;animation-duration:3.1s;animation-delay:1.3s"></span><span class="star" style="left:9.9%;top:56.9%;width:3.4px;height:3.4px;animation-duration:3.9s;animation-delay:2.5s"></span><span class="star" style="left:66.8%;top:84.7%;width:1.0px;height:1.0px;animation-duration:3.4s;animation-delay:3.4s"></span><span class="star" style="left:1.3%;top:84.6%;width:2.2px;height:2.2px;animation-duration:4.9s;animation-delay:3.3s"></span><span class="star" style="left:44.3%;top:11.8%;width:1.6px;height:1.6px;animation-duration:3.5s;animation-delay:0.9s"></span><span class="star" style="left:47.4%;top:29.8%;width:2.9px;height:2.9px;animation-duration:3.6s;animation-delay:2.6s"></span><span class="star" style="left:31.8%;top:12.6%;width:3.3px;height:3.3px;animation-duration:4.7s;animation-delay:1.3s"></span><span class="star" style="left:80.7%;top:92.4%;width:2.5px;height:2.5px;animation-duration:3.0s;animation-delay:3.5s"></span><span class="star" style="left:56.2%;top:61.4%;width:3.2px;height:3.2px;animation-duration:2.0s;animation-delay:2.5s"></span><span class="star" style="left:92.8%;top:65.6%;width:1.5px;height:1.5px;animation-duration:2.8s;animation-delay:2.3s"></span><span class="star" style="left:75.5%;top:80.8%;width:1.6px;height:1.6px;animation-duration:4.2s;animation-delay:3.6s"></span><span class="star" style="left:36.5%;top:21.2%;width:3.4px;height:3.4px;animation-duration:2.3s;animation-delay:4.0s"></span><span class="star" style="left:91.9%;top:21.3%;width:2.6px;height:2.6px;animation-duration:4.0s;animation-delay:0.2s"></span><span class="star" style="left:33.1%;top:20.8%;width:3.0px;height:3.0px;animation-duration:5.0s;animation-delay:0.3s"></span><span class="star" style="left:60.6%;top:12.4%;width:3.0px;height:3.0px;animation-duration:2.6s;animation-delay:1.7s"></span><span class="star" style="left:35.2%;top:96.4%;width:1.4px;height:1.4px;animation-duration:2.2s;animation-delay:2.1s"></span><span class="star" style="left:24.3%;top:0.1%;width:1.1px;height:1.1px;animation-duration:2.0s;animation-delay:3.8s"></span><span class="star" style="left:50.5%;top:45.4%;width:3.3px;height:3.3px;animation-duration:4.0s;animation-delay:0.9s"></span><span class="star" style="left:66.9%;top:90.2%;width:2.8px;height:2.8px;animation-duration:3.5s;animation-delay:0.9s"></span><span class="star" style="left:96.5%;top:19.8%;width:2.5px;height:2.5px;animation-duration:2.2s;animation-delay:2.5s"></span><div class="shoot shoot1"></div><div class="shoot shoot2"></div></div>
+  <div class="hero-badge">✦ Autoconhecimento Profundo ✦</div>
+  <div class="orbita"><div class="anel anel1"></div><div class="anel anel2"></div><div class="hero-icon">🌌</div></div>
+  <h1 class="hero-title">MAPA ASTRAL PERSONALIZADO</h1>
+  <div class="hero-sub">O Retrato Completo de Quem Você É</div>
+  <p class="hero-desc">Cada planeta, casa e aspecto do seu mapa traduzido em profundidade — quem você é, como ama, do que precisa e para onde caminha.</p>
+  <div class="hero-price">
+    <div class="price-de">De R$ 197,97</div>
+    <div class="price-por">R$ 129,97</div>
+    <div class="price-label">🔥 Promoção de lançamento · PDF completo personalizado</div>
+  </div>
+  <div class="countdown"><span class="cd-label">⏳ Oferta de lançamento termina em</span> <span class="cd-time" id="cd-time">--</span></div>
+  <a onclick="irParaCheckout()" class="btn-comprar">🌌 Quero Meu Mapa Astral Personalizado</a>
+  <p class="hero-seguro">🔒 Pagamento seguro via Mercado Pago · PIX e Cartão · Dados protegidos pela LGPD</p>
+</div>
+<div class="section">
+  <div class="sec-label">✦ O Que Você Vai Descobrir</div>
+  <h2 class="sec-title">O Retrato Completo de Quem Você É</h2>
+  <p class="sec-sub">Cada planeta, casa e aspecto do seu mapa traduzido em profundidade — quem você é, como ama, do que precisa e para onde caminha.</p>
+  <div class="grid">
+    <div class="card"><div class="card-icon">☀️</div><div class="card-title">Sol — Essência</div><p class="card-text">Sua identidade central e o que faz seu coração brilhar.</p></div>
+    <div class="card"><div class="card-icon">🌙</div><div class="card-title">Lua — Emoções</div><p class="card-text">Suas necessidades afetivas e o que traz segurança.</p></div>
+    <div class="card"><div class="card-icon">⬆️</div><div class="card-title">Ascendente</div><p class="card-text">A forma como você chega ao mundo e é percebida.</p></div>
+    <div class="card"><div class="card-icon">✦</div><div class="card-title">Planetas & Talentos</div><p class="card-text">Mercúrio, Vênus e Marte — os dons que você carrega.</p></div>
+    <div class="card"><div class="card-icon">🏠</div><div class="card-title">As 12 Casas</div><p class="card-text">As áreas da vida onde sua energia se concentra.</p></div>
+    <div class="card"><div class="card-icon">🔗</div><div class="card-title">Aspectos</div><p class="card-text">As conversas entre os astros que tecem sua história.</p></div>
+  </div>
+</div>
+<div class="section alt">
+  <div class="sec-label">✦ O Que Terá no Seu Mapa</div>
+  <h2 class="sec-title">Seu PDF Completo Contém</h2>
+  <div class="inclui-list">
+    <div class="inclui-item"><span class="inclui-check">✦</span>Análise dos 10 planetas em signo e casa</div>
+    <div class="inclui-item"><span class="inclui-check">✦</span>Ascendente e Meio do Céu</div>
+    <div class="inclui-item"><span class="inclui-check">✦</span>Distribuição de elementos e modalidades</div>
+    <div class="inclui-item"><span class="inclui-check">✦</span>Stélios e dignidades planetárias</div>
+    <div class="inclui-item"><span class="inclui-check">✦</span>As 12 casas astrológicas</div>
+    <div class="inclui-item"><span class="inclui-check">✦</span>Aspectos principais do mapa</div>
+    <div class="inclui-item"><span class="inclui-check">✦</span>Propósito de vida (Nodos)</div>
+    <div class="inclui-item"><span class="inclui-check">✦</span>PDF completo e personalizado</div>
+  </div>
+</div>
+<div class="section">
+  <div class="sec-label">✦ Depoimentos</div>
+  <h2 class="sec-title">Quem Já Recebeu</h2>
+  <div class="testi-grid">
+    <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"Foi como me ver pela primeira vez. Cada página fazia sentido."</p><div class="testi-name">— MARIANA L., CURITIBA</div></div>
+    <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"O mapa explicou padrões que carrego a vida toda. Impressionante."</p><div class="testi-name">— RAFAEL S., SALVADOR</div></div>
+  </div>
+</div>
+<div class="section alt">
+  <div class="cta">
+    <h2>Você Está Escrito<br>nas Estrelas</h2>
+    <p>Um retrato completo e pessoal, gerado por IA e supervisionado por astróloga com 30 anos de experiência.</p>
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:.85rem;color:#5a3d80;text-decoration:line-through">De R$ 197,97</div>
+      <div style="font-family:'Cinzel',serif;font-size:2rem;color:var(--gold)">R$ 129,97</div>
+      <div style="font-size:.75rem;color:#7a5ea0;margin-top:.3rem">🔥 Promoção de lançamento</div>
+    </div>
+    <a onclick="irParaCheckout()" class="btn-comprar">🌌 Quero Agora</a>
+    <p style="font-size:.72rem;color:#3a2560;margin-top:1rem">🔒 Pagamento seguro · PIX e Cartão</p>
+  </div>
+</div>
+<div class="section" id="checkout">
+  <div class="sec-label">✦ Garanta o Seu</div>
+  <h2 class="sec-title">Mapa Astral Personalizado Personalizado</h2>
+  <p class="sec-sub">Preencha seus dados e pague sem sair desta página — PIX ou cartão.</p>
+  <div class="checkout-wrap">
+    <div id="form-section">
+      <div class="cr-box">
+        <div class="cr-title">✦ Já é cliente Astralia? Ganhe 10% ✦</div>
+        <div class="cr-row">
+          <input type="text" id="f-codigo-cliente" placeholder="ASTRO-XXX-XXXXXX" maxlength="16"/>
+          <button onclick="validarCodigoCliente()" id="cr-btn">Aplicar</button>
+        </div>
+        <div class="cr-status" id="cr-status"></div>
+      </div>
+      <div class="fbox">
+        <div class="fbox-title">✧ Seus Dados ✧</div>
+        <div class="fd"><label>Nome Completo</label><input type="text" id="f-nome" placeholder="Seu nome completo"/></div>
+        <div class="r2">
+          <div class="fd"><label>WhatsApp</label><input type="tel" id="f-whatsapp" placeholder="(00) 00000-0000"/></div>
+          <div class="fd"><label>E-mail</label><input type="email" id="f-email" placeholder="seu@email.com"/></div>
+        </div>
+        <div class="fd" id="campo-cpf" style="display:none"><label>CPF (obrigatório para cartão)</label><input type="text" id="f-cpf" placeholder="000.000.000-00" maxlength="14"/></div>
+        <div class="fbox-title" style="margin-top:.4rem">✧ Dados de Nascimento ✧</div>
+        <div class="r2">
+          <div class="fd"><label>Data de Nascimento</label><input type="date" id="f-data"/></div>
+          <div class="fd"><label>Hora (se souber)</label><input type="time" id="f-hora"/></div>
+        </div>
+        <div class="fd">
+          <label>Cidade, Estado e País</label>
+          <input type="text" id="f-cidade" placeholder="Ex.: Fortaleza, Ceará, Brasil" autocomplete="off" oninput="buscarCidade(this)"/>
+          <div class="autocomplete-results" id="lista-cidade"></div>
+          <input type="hidden" id="f-lat"/><input type="hidden" id="f-lon"/>
+        </div>
+      </div>
+      <div class="preco-box">
+        <div class="preco-label">Mapa Astral Personalizado</div>
+        <div class="preco-val" id="p-valor">R$ 129,97</div>
+      </div>
+      <div class="fbox">
+        <div class="fbox-title">✧ Forma de Pagamento ✧</div>
+        <div class="metodos">
+          <div class="metodo-btn ativo" onclick="selecionarMetodo('pix')" id="m-pix"><div class="metodo-btn-icon">⚡</div><div class="metodo-btn-label">PIX</div></div>
+          <div class="metodo-btn" onclick="selecionarMetodo('cartao')" id="m-cartao"><div class="metodo-btn-icon">💳</div><div class="metodo-btn-label">Cartão</div></div>
+        </div>
+        <div class="form-cartao" id="form-cartao">
+          <div class="fd"><label>Número do Cartão</label><input type="text" id="c-numero" placeholder="0000 0000 0000 0000" maxlength="19"/></div>
+          <div class="fd"><label>Nome no Cartão</label><input type="text" id="c-nome" placeholder="NOME COMO ESTÁ NO CARTÃO" style="text-transform:uppercase"/></div>
+          <div class="r3">
+            <div class="fd"><label>Validade</label><input type="text" id="c-validade" placeholder="MM/AA" maxlength="5"/></div>
+            <div class="fd"><label>CVV</label><input type="text" id="c-cvv" placeholder="000" maxlength="4"/></div>
+            <div class="fd"><label>Parcelas</label><select id="c-parcelas"><option value="1">1x R$ 129,97</option></select></div>
+          </div>
+        </div>
+      </div>
+      <div class="err-msg" id="err-msg">Preencha todos os campos.</div>
+      <div class="lgpd-checkbox" onclick="if(event.target.tagName!=='INPUT'){document.getElementById('lgpd-aceite').click()}">
+        <input type="checkbox" id="lgpd-aceite"/>
+        <div class="lgpd-checkbox-text"><strong>Li e aceito</strong> o tratamento dos meus dados conforme a LGPD (Lei 13.709/2018) para a geração do meu Mapa Astral Personalizado.</div>
+      </div>
+      <button class="btn-pagar" id="btn-pagar" onclick="processarPagamento()">⚡ Gerar PIX — R$ 129,97</button>
+      <p style="text-align:center;font-size:.72rem;color:#3a2560;margin-top:.6rem">🔒 Pagamento por Mercado Pago · Dados de cartão nunca armazenados</p>
+    </div>
+    <div class="fbox pix-box" id="pix-section" style="display:none">
+      <div class="fbox-title">✧ Pague com PIX ✧</div>
+      <p style="font-size:.88rem;color:var(--text)">Escaneie o QR Code com o app do seu banco:</p>
+      <img id="pix-qr-img" class="pix-qr" alt="QR Code PIX"/>
+      <p style="font-size:.85rem;color:var(--muted)">Ou copie o código:</p>
+      <div class="pix-code" id="pix-code-text"></div>
+      <button class="btn-copy" onclick="copiarPix()">📋 Copiar Código PIX</button>
+      <p style="font-size:.78rem;color:var(--gold);margin-top:1rem;font-style:italic">Aguardando pagamento... ✨</p>
+    </div>
+    <div class="aguardando-box" id="aguardando-box">
+      <div class="sucesso-icon">⏳</div>
+      <h3 style="font-family:'Cinzel',serif;color:var(--accent);margin:.8rem 0">VERIFICANDO PAGAMENTO...</h3>
+      <p style="font-size:.78rem;color:#3a2560" id="polling-status">Aguardando confirmação...</p>
+    </div>
+    <div class="sucesso-box" id="sucesso-box">
+      <div class="sucesso-icon">🌌</div>
+      <h3>Pagamento confirmado!</h3>
+      <p>Seu Mapa Astral Personalizado está sendo preparado com cuidado e chega no seu e-mail e WhatsApp. Obrigada por confiar na Astral IA. ✨</p>
+    </div>
+  </div>
+</div>
+<div class="section alt">
+  <div class="sec-label">✦ Continue Sua Jornada</div>
+  <h2 class="sec-title">Outros Mapas para Você</h2>
+  <p class="sec-sub">Cada mapa ilumina uma face diferente da sua história.</p>
+  <div class="upsell-grid">
+    <a class="upsell-card" href="https://mapakarmico.astralia.online" target="_blank"><div class="upsell-icon">🔮</div><div class="upsell-nome">Mapa Kármico</div><div class="upsell-de">De R$ 259,97</div><div class="upsell-preco">R$ 197,97</div></a>
+    <a class="upsell-card" href="https://mapadasorte.astralia.online" target="_blank"><div class="upsell-icon">🍀</div><div class="upsell-nome">Mapa da Sorte</div><div class="upsell-de">De R$ 167,97</div><div class="upsell-preco">R$ 97,97</div></a>
+    <a class="upsell-card" href="https://mapaprofissional.astralia.online" target="_blank"><div class="upsell-icon">💼</div><div class="upsell-nome">Mapa Profissional</div><div class="upsell-de">De R$ 129,97</div><div class="upsell-preco">R$ 97,97</div></a>
+  </div>
+</div>
+<footer>
+  <div class="footer-logo">Astral IA</div>
+  <p class="footer-text">Leituras geradas por Inteligência Artificial, supervisionadas por astróloga com 30 anos de experiência.<br>Para fins de autoconhecimento e entretenimento espiritual · Dados protegidos pela LGPD</p>
+</footer>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>
+// ===== Checkout — mecânica portada do Lilith (produção) =====
+const PRECO_ATUAL = 129.97;
+let metodoSelecionado = 'pix', MP_PUBLIC_KEY = null, mp = null;
+let sessionId = null, pollingInterval = null, tentativas = 0;
+const dadosForm = {};
+
+function formatBRL(v){ return 'R$ ' + v.toFixed(2).replace('.', ','); }
+function irParaCheckout(){ document.getElementById('checkout').scrollIntoView({behavior:'smooth'}); }
+
+async function carregarConfig(){
+  try{ const r = await fetch('/api/config'); const d = await r.json();
+    MP_PUBLIC_KEY = d.publicKey; if(window.MercadoPago) mp = new MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'}); }
+  catch(e){ console.error('Config erro:', e); }
+}
+carregarConfig();
+
+// Máscaras
+document.getElementById('f-cpf').addEventListener('input', e=>{ let v=e.target.value.replace(/\D/g,'');
+  v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})/,'$1-$2'); e.target.value=v.substring(0,14); });
+document.getElementById('c-numero').addEventListener('input', e=>{ let v=e.target.value.replace(/\D/g,''); v=v.replace(/(\d{4})/g,'$1 ').trim(); e.target.value=v.substring(0,19); });
+document.getElementById('c-validade').addEventListener('input', e=>{ let v=e.target.value.replace(/\D/g,''); if(v.length>=2)v=v.substring(0,2)+'/'+v.substring(2); e.target.value=v.substring(0,5); });
+
+function selecionarMetodo(m){
+  metodoSelecionado=m;
+  document.getElementById('m-pix').classList.toggle('ativo', m==='pix');
+  document.getElementById('m-cartao').classList.toggle('ativo', m==='cartao');
+  document.getElementById('form-cartao').classList.toggle('ativo', m==='cartao');
+  document.getElementById('campo-cpf').style.display = m==='cartao' ? 'block' : 'none';
+  document.getElementById('btn-pagar').textContent = m==='pix' ? '⚡ Gerar PIX — '+formatBRL(precoFinal()) : '💳 Pagar '+formatBRL(precoFinal());
+}
+
+// Geocoding (Nominatim)
+document.addEventListener('click', e=>{ const l=document.getElementById('lista-cidade'); if(!l.contains(e.target)) l.style.display='none'; });
+let buscaTimer=null;
+async function buscarCidade(input){
+  const q=input.value.trim(), lista=document.getElementById('lista-cidade');
+  if(input.dataset.valida==='true'){ input.dataset.valida='false'; document.getElementById('f-lat').value=''; document.getElementById('f-lon').value=''; }
+  if(q.length<3){ lista.style.display='none'; return; }
+  clearTimeout(buscaTimer);
+  buscaTimer=setTimeout(async()=>{
+    try{ const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&accept-language=pt`);
+      const data=await r.json(); if(!data.length){ lista.style.display='none'; return; }
+      lista.innerHTML=data.map(d=>`<div class="autocomplete-item" onclick="selecionarCidade('${d.display_name.replace(/'/g,"\\'")}','${d.lat}','${d.lon}')">${d.display_name}</div>`).join('');
+      lista.style.display='block';
+    }catch(e){ lista.style.display='none'; }
+  },350);
+}
+function selecionarCidade(nome,lat,lon){
+  document.getElementById('f-cidade').value=nome; document.getElementById('f-cidade').dataset.valida='true';
+  document.getElementById('f-lat').value=lat; document.getElementById('f-lon').value=lon;
+  document.getElementById('lista-cidade').style.display='none';
+}
+
+function erro(msg){ const e=document.getElementById('err-msg'); e.textContent=msg; e.style.display='block'; }
+function validar(){
+  const g=id=>document.getElementById(id).value.trim();
+  if(!g('f-nome')||!g('f-email')||!g('f-data')||!g('f-cidade')) { erro('Preencha nome, e-mail, data e cidade.'); return false; }
+  if(!document.getElementById('f-lat').value){ erro('Selecione sua cidade na lista para fixar as coordenadas.'); return false; }
+  if(metodoSelecionado==='cartao' && document.getElementById('f-cpf').value.replace(/\D/g,'').length!==11){ erro('Informe um CPF válido para o cartão.'); return false; }
+  if(!document.getElementById('lgpd-aceite').checked){ erro('É preciso aceitar a LGPD.'); return false; }
+  return true;
+}
+function montarDadosForm(){
+  Object.assign(dadosForm,{
+    nome:document.getElementById('f-nome').value.trim(), email:document.getElementById('f-email').value.trim(),
+    whatsapp:document.getElementById('f-whatsapp').value.trim(), cpf:document.getElementById('f-cpf').value.replace(/\D/g,''),
+    data:document.getElementById('f-data').value, hora:document.getElementById('f-hora').value||'12:00',
+    cidade:document.getElementById('f-cidade').value.trim(), lat:document.getElementById('f-lat').value, lon:document.getElementById('f-lon').value, codigoCliente:codigoClienteAplicado
+  });
+}
+
+async function processarPagamento(){
+  if(!validar()) return;
+  document.getElementById('err-msg').style.display='none';
+  montarDadosForm();
+  const btn=document.getElementById('btn-pagar'); btn.disabled=true; btn.textContent='⏳ Processando...';
+  try{
+    let paymentData={};
+    if(metodoSelecionado==='pix'){ paymentData={payment_method_id:'pix'}; }
+    else{
+      const numero=document.getElementById('c-numero').value.replace(/\s/g,''), nome=document.getElementById('c-nome').value.trim();
+      const validade=document.getElementById('c-validade').value.split('/'), cvv=document.getElementById('c-cvv').value, parcelas=parseInt(document.getElementById('c-parcelas').value);
+      if(!numero||!nome||validade.length!==2||!cvv) throw new Error('Preencha todos os dados do cartão.');
+      if(!mp) throw new Error('SDK do Mercado Pago não carregado. Recarregue a página.');
+      const bandeira=await mp.getPaymentMethods({bin:numero.substring(0,6)});
+      if(!bandeira.results||!bandeira.results.length) throw new Error('Cartão não reconhecido.');
+      const cardToken=await mp.createCardToken({ cardNumber:numero, cardholderName:nome, cardExpirationMonth:validade[0], cardExpirationYear:'20'+validade[1], securityCode:cvv, identificationType:'CPF', identificationNumber:dadosForm.cpf });
+      paymentData={ token:cardToken.id, payment_method_id:bandeira.results[0].id, installments:parcelas, payer:{identification:{type:'CPF',number:dadosForm.cpf}} };
+    }
+    const r=await fetch('/api/pagamento',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({paymentData, dadosCliente:dadosForm, preco:precoFinal(), descontoExtra:descontoCliente}) });
+    const result=await r.json();
+    if(!r.ok) throw new Error(result.details||result.error||'Erro no pagamento');
+    sessionId=result.sessionId; sessionStorage.setItem('sessionId',sessionId);
+    if(metodoSelecionado==='pix' && result.qr_code_base64){
+      document.getElementById('form-section').style.display='none';
+      document.getElementById('pix-section').style.display='block';
+      document.getElementById('pix-qr-img').src='data:image/png;base64,'+result.qr_code_base64;
+      document.getElementById('pix-code-text').textContent=result.qr_code;
+      iniciarPolling();
+    } else if(result.status==='approved'){
+      document.getElementById('form-section').style.display='none';
+      document.getElementById('aguardando-box').style.display='block';
+      iniciarPolling();
+    } else { throw new Error('Pagamento '+result.status+': '+(result.status_detail||'tente novamente')); }
+  }catch(e){
+    btn.disabled=false; btn.textContent=metodoSelecionado==='pix'?'⚡ Gerar PIX — '+formatBRL(precoFinal()):'💳 Pagar '+formatBRL(precoFinal());
+    erro(e.message||'Erro no pagamento. Tente novamente.');
+  }
+}
+function copiarPix(){ navigator.clipboard.writeText(document.getElementById('pix-code-text').textContent).then(()=>{ const b=event.target,o=b.textContent; b.textContent='✓ Copiado!'; setTimeout(()=>b.textContent=o,2000); }); }
+
+function iniciarPolling(){
+  tentativas=0; if(pollingInterval) clearInterval(pollingInterval);
+  pollingInterval=setInterval(async()=>{
+    tentativas++;
+    const ps=document.getElementById('polling-status'); if(ps) ps.textContent=`Verificando... (${tentativas}/60)`;
+    if(tentativas>60){ clearInterval(pollingInterval); return; }
+    try{ const r=await fetch(`/api/check?sessionId=${sessionId}`); const d=await r.json();
+      if(d.status==='approved'){ clearInterval(pollingInterval);
+        document.getElementById('pix-section').style.display='none';
+        document.getElementById('aguardando-box').style.display='none';
+        document.getElementById('sucesso-box').style.display='block';
+      }
+    }catch(e){}
+  },3000);
+}
+
+
+
+// ===== Countdown de lançamento (7 dias) =====
+(function(){ let fim; try{ fim=localStorage.getItem('promo_mapaastralpersonalizado_fim'); }catch(e){}
+  if(!fim){ fim=Date.now()+7*24*60*60*1000; try{ localStorage.setItem('promo_mapaastralpersonalizado_fim',fim); }catch(e){} }
+  fim=parseInt(fim); const el=document.getElementById('cd-time');
+  function tick(){ let d=fim-Date.now(); if(d<0)d=0;
+    const dias=Math.floor(d/864e5),hrs=Math.floor(d%864e5/36e5),min=Math.floor(d%36e5/6e4),seg=Math.floor(d%6e4/1e3);
+    if(el) el.textContent=`${dias}d ${String(hrs).padStart(2,'0')}h ${String(min).padStart(2,'0')}m ${String(seg).padStart(2,'0')}s`; }
+  tick(); setInterval(tick,1000); })();
+
+// ===== Código de cliente recorrente (-10%) =====
+let descontoCliente=0, codigoClienteAplicado=null;
+function precoFinal(){ return +(PRECO_ATUAL*(1-descontoCliente)).toFixed(2); }
+function atualizarPrecoExibido(){ document.getElementById('p-valor').textContent=formatBRL(precoFinal()); selecionarMetodo(metodoSelecionado); }
+async function validarCodigoCliente(){
+  const codigo=document.getElementById('f-codigo-cliente').value.trim().toUpperCase();
+  const status=document.getElementById('cr-status'), btn=document.getElementById('cr-btn');
+  if(!/^ASTRO-[A-Z]{3}-[A-Z0-9]{6}$/.test(codigo)){ status.className='cr-status erro'; status.textContent='⚠️ Formato inválido. Use ASTRO-XXX-XXXXXX'; return; }
+  btn.disabled=true; btn.textContent='...'; status.textContent='';
+  try{ const r=await fetch('/api/cliente?codigo='+encodeURIComponent(codigo)); const d=await r.json();
+    if(d.existe||d.valido||d.cliente){ descontoCliente=0.10; codigoClienteAplicado=codigo;
+      status.className='cr-status ok'; status.textContent='✓ Código válido! 10% de desconto aplicado.'; atualizarPrecoExibido();
+    } else { status.className='cr-status erro'; status.textContent='Código não encontrado.'; }
+  }catch(e){ status.className='cr-status erro'; status.textContent='Não foi possível validar agora.'; }
+  btn.disabled=false; btn.textContent='Aplicar';
+}
+</script>
+</body>
+</html>
